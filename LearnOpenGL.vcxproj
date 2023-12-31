@@ -138,7 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\HelloTriangle.cpp" />
+    <ClCompile Include="src\HelloSquare.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

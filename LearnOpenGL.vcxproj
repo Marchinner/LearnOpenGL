@@ -137,9 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CoordinateSystems.cpp" />
     <ClCompile Include="src\shaders\Shader.cpp" />
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\Textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\shaders\Shader.h" />
@@ -149,6 +149,7 @@
     <None Include="src\shaders\shader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="src\textures\awesomeface.png" />
     <Image Include="src\textures\container.jpg" />
     <Image Include="src\textures\wall.jpg" />
   </ItemGroup>

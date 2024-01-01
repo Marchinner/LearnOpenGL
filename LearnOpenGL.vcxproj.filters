@@ -21,7 +21,7 @@
     <ClCompile Include="src\shaders\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Textures.cpp">
+    <ClCompile Include="src\CoordinateSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,6 +39,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="src\textures\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\awesomeface.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

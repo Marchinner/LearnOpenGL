@@ -18,10 +18,10 @@
     <ClCompile Include="src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shaders.cpp">
+    <ClCompile Include="src\shaders\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\shaders\Shader.cpp">
+    <ClCompile Include="src\Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,5 +33,13 @@
   <ItemGroup>
     <None Include="src\shaders\shader.frag" />
     <None Include="src\shaders\shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\textures\wall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="src\textures\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

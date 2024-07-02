@@ -1,11 +1,13 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "../lib/Shader.h"
+#include "../lib/stb_image.h"
 
 #include <GLFW/glfw3.h>
 
 // Window Settings
 const unsigned int WIDTH = 600;
 const unsigned int HEIGHT = 400;
-const char* TITLE = "Triangulo com Shaders";
+const char* TITLE = "Triangulo com textura";
 
 // Function Prototypes
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -54,15 +56,36 @@ int main()
 		std::cout << "SUCESSO::GLAD::INICIALIZACAO" << std::endl;
 	}
 
-	Shader myShader("shader/vertexShader.glsl", "shader/fragmentShader.glsl");
+	Shader myShader("resources/shaders/vertexShader.glsl", "resources/shaders/fragmentShader.glsl");
 
-	// Define the rectangle vertices
+	// Define the triangle vertices
 	float vertices[] = {
-		// positions         // colors
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
+		// positions         // colors         // texture
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, // bottom left
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.5f, 1.0f  // top 
 	};
+
+	// Texture Loading
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("resources/textures/wall.jpg", &width, &height, &nrChannels, 0);
+
+	// Generating the Texture
+	GLuint texture;
+	glGenTextures(1, &texture);
+	// Binding the texture
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// Texture configuration
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Generate
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	// Free the texture data
+	stbi_image_free(data);
+
 
 	// Create the Vertex Array Object
 	GLuint VAO;
@@ -80,13 +103,17 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// Set the Buffer Data Attributes Array
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	// Enable the newly created Vertex Array Attribute
 	glEnableVertexAttribArray(0);
 
-	// Set the Buffer Data Attibutes Array for the color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	// Set the Buffer Data Attributes Array for the color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	// Set the Buffer Data Attributes Array for the texture
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

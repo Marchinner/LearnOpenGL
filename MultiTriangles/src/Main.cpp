@@ -9,9 +9,17 @@ const unsigned int WIDTH = 600;
 const unsigned int HEIGHT = 400;
 const char* TITLE = "Varias Formas Geometricas (EBO)";
 
+// Fps
+float deltaTime{ 0.0f };
+float lastFrame{ 0.0f };
+int frameCount{ 0 };
+double lastTime{ 0.0 };
+int actualFps{ 0 };
+
 // Functions Prototypes
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+static void showFPSOverlay(bool* p_open);
 
 int main()
 {
@@ -124,6 +132,20 @@ int main()
 	// Main loop
 	while (!glfwWindowShouldClose(window))
 	{
+		// Actual frame time
+		float currentFrame = static_cast<float>(glfwGetTime());
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		frameCount++;
+		// Calculates FPS every second
+		if (currentFrame - lastTime >= 1.0)
+		{
+			actualFps = frameCount;
+			frameCount = 0;
+			lastTime += 1.0;
+		}
+
 		// Process all the inputs
 		processInput(window);
 
@@ -137,13 +159,13 @@ int main()
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, 0);
 
+		// ImGui
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 
-		ImGui::End();
+		showFPSOverlay(&show);
+
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -169,4 +191,50 @@ void processInput(GLFWwindow* window)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
+}
+
+static void showFPSOverlay(bool* p_open)
+{
+	static int location = 0;
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+	if (location >= 0)
+	{
+		const float PAD = 10.0f;
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+		ImVec2 work_size = viewport->WorkSize;
+		ImVec2 window_pos, window_pos_pivot;
+		window_pos.x = (location & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+		window_pos.y = (location & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+		window_pos_pivot.x = (location & 1) ? 1.0f : 0.0f;
+		window_pos_pivot.y = (location & 2) ? 1.0f : 0.0f;
+		ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+		window_flags |= ImGuiWindowFlags_NoMove;
+	}
+	else if (location == -2)
+	{
+		// Center window
+		ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		window_flags |= ImGuiWindowFlags_NoMove;
+	}
+	ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+	if (ImGui::Begin("FPS Counter", p_open, window_flags))
+	{
+		ImGui::Text("FPS Counter\n");
+		ImGui::Separator();
+		ImGui::Text("%d", actualFps);
+		if (ImGui::BeginPopupContextWindow())
+		{
+			if (ImGui::MenuItem("Custom", NULL, location == -1)) location = -1;
+			if (ImGui::MenuItem("Center", NULL, location == -2)) location = -2;
+			if (ImGui::MenuItem("Top-left", NULL, location == 0)) location = 0;
+			if (ImGui::MenuItem("Top-right", NULL, location == 1)) location = 1;
+			if (ImGui::MenuItem("Bottom-left", NULL, location == 2)) location = 2;
+			if (ImGui::MenuItem("Bottom-right", NULL, location == 3)) location = 3;
+			if (p_open && ImGui::MenuItem("Close")) *p_open = false;
+			ImGui::EndPopup();
+		}
+	}
+	ImGui::End();
 }

@@ -149,6 +149,14 @@
   <ItemGroup>
     <ClInclude Include="lib\Shader.h" />
     <ClInclude Include="lib\stb_image.h" />
+    <ClInclude Include="src\Vendor\imgui\imconfig.h" />
+    <ClInclude Include="src\Vendor\imgui\imgui.h" />
+    <ClInclude Include="src\Vendor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="src\Vendor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="src\Vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\Vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\Vendor\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\fragmentShader.glsl" />
@@ -162,6 +170,13 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\Vendor\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
